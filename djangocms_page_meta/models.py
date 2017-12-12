@@ -61,7 +61,7 @@ class PageMeta(PageExtension):
         help_text=_('\'@\' characther not required.')
     )
     twitter_type = models.CharField(
-        _('Resource type'), max_length=255, choices=meta_settings.TWITTER_TYPES, blank=True
+        _('Twitter Resource type'), max_length=255, choices=meta_settings.TWITTER_TYPES, blank=True
     )
     gplus_author = models.CharField(
         _('Author Google+ URL'), max_length=255, default='', blank=True,
@@ -70,6 +70,22 @@ class PageMeta(PageExtension):
     gplus_type = models.CharField(
         _('Resource type'), max_length=255, choices=meta_settings.GPLUS_TYPES, blank=True,
         help_text=_('Use Article for generic pages.')
+    )
+    #added fields
+    keywords = models.CharField(
+        max_length=400, default='', blank=True
+    )
+    description = models.CharField(
+        max_length=400, default='', blank=True
+    )
+    og_description = models.CharField(
+        _('Facebook Description'), max_length=400, default='', blank=True
+    )
+    twitter_description = models.CharField(
+        _('Twitter Description'), max_length=140, default='', blank=True
+    )
+    gplus_description = models.CharField(
+        _('Google+ Description'), max_length=400, default='', blank=True
     )
 
     class Meta:

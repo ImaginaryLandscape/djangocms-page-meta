@@ -126,6 +126,22 @@ def get_page_meta(page, language):
                     pass
             if not meta.image and pagemeta.image:
                 meta.image = pagemeta.image.canonical_url or pagemeta.image.url
+            # added page level fields
+            if not meta.title and pagemeta.title:
+                meta.title = pagemeta.title
+            # we can override the meta description defined on the page
+            # otherwise we only update if there isn't a title description already
+            if pagemeta.description and (not meta.description or (titlemeta and not titlemeta.description)):
+                meta.description = pagemeta.description
+            if not meta.og_description and pagemeta.og_description:
+                meta.og_description = pagemeta.og_description
+            if not meta.twitter_description and pagemeta.twitter_description:
+                meta.twitter_description = pagemeta.twitter_description
+            if not meta.gplus_description and pagemeta.gplus_description:
+                meta.gplus_description = pagemeta.gplus_description
+            if not meta.keywords and pagemeta.keywords:
+                meta.keywords = pagemeta.keywords.strip().split(',')
+
             for item in pagemeta.extra.all():
                 attribute = item.attribute
                 if not attribute:
