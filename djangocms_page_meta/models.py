@@ -72,6 +72,9 @@ class PageMeta(PageExtension):
         help_text=_('Use Article for generic pages.')
     )
     #added fields
+    title = models.CharField(
+        max_length=400, default='', blank=True
+    )
     keywords = models.CharField(
         max_length=400, default='', blank=True
     )

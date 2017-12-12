@@ -127,7 +127,7 @@ def get_page_meta(page, language):
             if not meta.image and pagemeta.image:
                 meta.image = pagemeta.image.canonical_url or pagemeta.image.url
             # added page level fields
-            if not meta.title and pagemeta.title:
+            if pagemeta.title:
                 meta.title = pagemeta.title
             # we can override the meta description defined on the page
             # otherwise we only update if there isn't a title description already

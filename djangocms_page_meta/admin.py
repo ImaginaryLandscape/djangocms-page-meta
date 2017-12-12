@@ -67,6 +67,7 @@ class PageMetaSimpleAdmin(PageMetaAdmin):
     fieldsets = (
         (None, {'fields': (
             'image',
+            'title',
             'keywords',
             'description',
             'og_description',
