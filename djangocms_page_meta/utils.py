@@ -133,11 +133,11 @@ def get_page_meta(page, language):
             # otherwise we only update if there isn't a title description already
             if pagemeta.description and (not meta.description or (titlemeta and not titlemeta.description)):
                 meta.description = pagemeta.description
-            if not meta.og_description and pagemeta.og_description:
+            if not getattr(meta, 'og_description', '') and pagemeta.og_description:
                 meta.og_description = pagemeta.og_description
-            if not meta.twitter_description and pagemeta.twitter_description:
+            if not getattr(meta, 'twitter_description', '') and pagemeta.twitter_description:
                 meta.twitter_description = pagemeta.twitter_description
-            if not meta.gplus_description and pagemeta.gplus_description:
+            if not getattr(meta, 'gplus_description', '') and pagemeta.gplus_description:
                 meta.gplus_description = pagemeta.gplus_description
             if not meta.keywords and pagemeta.keywords:
                 meta.keywords = pagemeta.keywords.strip().split(',')

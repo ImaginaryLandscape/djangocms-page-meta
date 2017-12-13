@@ -4,11 +4,10 @@
 History
 *******
 
-0.7.1 (unreleased)
+0.7.2
 ==================
 
-* Add support for filer canonical URL
-* Do not fail if request is not in context
+* Simplify Common meta form popup
 
 0.7.0 (2016-12-04)
 ==================
