@@ -35,6 +35,7 @@ def get_page_meta(page, language):
     except AttributeError:
         return None
     gplus_server = 'https://plus.google.com'
+    titlemeta = None
     meta = cache.get(meta_key)
     if not meta:
         meta = Meta()
@@ -55,14 +56,8 @@ def get_page_meta(page, language):
                 meta.keywords = titlemeta.keywords.strip().split(',')
             meta.locale = titlemeta.locale
             meta.og_description = titlemeta.og_description.strip()
-            if not meta.og_description:
-                meta.og_description = meta.description
             meta.twitter_description = titlemeta.twitter_description.strip()
-            if not meta.twitter_description:
-                meta.twitter_description = meta.description
             meta.gplus_description = titlemeta.gplus_description.strip()
-            if not meta.gplus_description:
-                meta.gplus_description = meta.description
             if titlemeta.image:
                 meta.image = title.titlemeta.image.canonical_url or title.titlemeta.image.url
             for item in titlemeta.extra.all():
@@ -72,10 +67,7 @@ def get_page_meta(page, language):
                 meta.extra_custom_props.append((attribute, item.name, item.value))
         except (TitleMeta.DoesNotExist, AttributeError):
             # Skipping title-level metas
-            if meta.description:
-                meta.og_description = meta.description
-                meta.twitter_description = meta.description
-                meta.gplus_description = meta.description
+            pass
         defaults = {
             'object_type': meta_settings.FB_TYPE,
             'og_type': meta_settings.FB_TYPE,
@@ -131,13 +123,13 @@ def get_page_meta(page, language):
                 meta.title = pagemeta.title
             # we can override the meta description defined on the page
             # otherwise we only update if there isn't a title description already
-            if pagemeta.description and (not meta.description or (titlemeta and not titlemeta.description)):
+            if pagemeta.description and titlemeta and not titlemeta.description:
                 meta.description = pagemeta.description
-            if not getattr(meta, 'og_description', '') and pagemeta.og_description:
+            if pagemeta.og_description and (not getattr(meta, 'og_description', '') or (titlemeta and not titlemeta.og_description)):
                 meta.og_description = pagemeta.og_description
-            if not getattr(meta, 'twitter_description', '') and pagemeta.twitter_description:
+            if pagemeta.twitter_description and (not getattr(meta, 'twitter_description', '') or (titlemeta and not titlemeta.twitter_description)):
                 meta.twitter_description = pagemeta.twitter_description
-            if not getattr(meta, 'gplus_description', '') and pagemeta.gplus_description:
+            if pagemeta.gplus_description and (not getattr(meta, 'gplus_description', '') or (titlemeta and not titlemeta.gplus_description)):
                 meta.gplus_description = pagemeta.gplus_description
             if not meta.keywords and pagemeta.keywords:
                 meta.keywords = pagemeta.keywords.strip().split(',')
@@ -149,6 +141,17 @@ def get_page_meta(page, language):
                 meta.extra_custom_props.append((attribute, item.name, item.value))
         except PageMeta.DoesNotExist:
             pass
+
+        # override social descriptions with the general
+        # descriptions if nothing more specific was found
+        if meta.description:
+            if not getattr(meta,'og_description', ''):
+                meta.og_description = meta.description
+            if not getattr(meta,'twitter_description', ''):
+                meta.twitter_description = meta.description
+            if not getattr(meta,'gplus_description', ''):
+                meta.gplus_description = meta.description
+
         for attr, val in defaults.items():
             if not getattr(meta, attr, '') and val:
                 setattr(meta, attr, val)
