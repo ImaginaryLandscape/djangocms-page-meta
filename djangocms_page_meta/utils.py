@@ -123,7 +123,7 @@ def get_page_meta(page, language):
                 meta.title = pagemeta.title
             # we can override the meta description defined on the page
             # otherwise we only update if there isn't a title description already
-            if pagemeta.description and titlemeta and not titlemeta.description:
+            if pagemeta.description and (not titlemeta or (titlemeta and not titlemeta.description)):
                 meta.description = pagemeta.description
             if pagemeta.og_description and (not getattr(meta, 'og_description', '') or (titlemeta and not titlemeta.og_description)):
                 meta.og_description = pagemeta.og_description
